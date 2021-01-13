@@ -58,7 +58,7 @@ var HamstroneApp = {
                     }
                     break;
                 case "signal":
-                    HamstroneApp.app.signals.push({ time: new Date().toLocaleString(), noun: data.data.noun, payload: data.data.payload });
+                    HamstroneApp.app.signals.push({ time: new Date().toLocaleString(), noun: data.data[0].noun, payload: data.data[0].payload, strpayload: data.data[1]});
                     break;
             }
         }

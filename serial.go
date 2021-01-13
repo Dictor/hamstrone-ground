@@ -74,7 +74,7 @@ func decodeMessage(msgchan chan *hamsterTongueMessage, sendchan chan []byte) {
 			case hamstertongue.MessageVerbSignal:
 				data, err := json.Marshal(generalMessage{
 					Type: "signal",
-					Data: msg,
+					Data: []interface{}{msg, string(msg.Payload)},
 				})
 				if err != nil {
 					globalLogger.WithField("error", err).Errorln("error caused while making message")

@@ -34,7 +34,7 @@
             </div>
             <div id="page-signal" v-if="currentPage == 'signal'">
                 <div class="signal-row" v-for="(v, i) in signals">
-                    {{v.time}}: <span>{{findSignalNounString(v.noun)}}</span>({{v.payload}})
+                    {{v.time}}: <span>{{findSignalNounString(v.noun)}}</span>({{v.strpayload}})
                 </div>
             </div>
         </div>
