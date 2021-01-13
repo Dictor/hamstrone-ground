@@ -8,7 +8,8 @@ const HamsterTongue = {
     Noun: {
         Signal: {
             InitOK: 0x00,
-            InitFail: 0x01
+            InitFail: 0x01,
+            I2CReadFail: 0x02,
         }
     }
 }
