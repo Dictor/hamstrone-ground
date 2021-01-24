@@ -49,18 +49,27 @@ var HamstroneApp = {
         });
         this.ws = new WebSocket((location.protocol == "https:" ? "wss:" : "ws:") + "//" + document.location.host + "/ws");
         this.ws.onmessage = function(event) {
-            let data = JSON.parse(event.data);
-            switch (data.type) {
-                case "value":
-                    HamstroneApp.app.values.splice(0);
-                    for (d in data.data) {
-                        HamstroneApp.app.values.push({ name: d, value: data.data[d] });
-                    }
-                    break;
-                case "signal":
-                    HamstroneApp.app.signals.push({ time: new Date().toLocaleString(), noun: data.data[0].noun, payload: data.data[0].payload, strpayload: data.data[1]});
-                    break;
+            let msgs = event.data.split("\n");
+            if (msgs.length > 1) {
+                for (m of msgs) {
+                    HamstroneApp.parseMessage(JSON.parse(m));
+                }
+            } else {
+                HamstroneApp.parseMessage(JSON.parse(msgs[0]));
             }
         }
     },
+    parseMessage: function(msg) {
+        switch (msg.type) {
+            case "value":
+                HamstroneApp.app.values.splice(0);
+                for (d in msg.data) {
+                    HamstroneApp.app.values.push({ name: d, value: msg.data[d] });
+                }
+                break;
+            case "signal":
+                HamstroneApp.app.signals.push({ time: new Date().toLocaleString(), noun: msg.data[0].noun, payload: msg.data[0].payload, strpayload: msg.data[1]});
+                break;
+        }
+    }
 }
