@@ -5,6 +5,7 @@ import (
 	"net/http"
 
 	elogrus "github.com/dictor/echologrus"
+	"github.com/dictor/hamstrone_ground/hamstertongue"
 	ws "github.com/dictor/wswrapper"
 	"github.com/jacobsa/go-serial/serial"
 	"github.com/labstack/echo/v4"
@@ -84,6 +85,9 @@ func main() {
 	})
 	e.GET("/definition/value", func(c echo.Context) error {
 		return c.JSON(http.StatusOK, ValueIDToKey)
+	})
+	e.GET("/definition/protocol", func(c echo.Context) error {
+		return c.JSON(http.StatusOK, hamstertongue.MessageConstant)
 	})
 	e.File("/", "ui/index.html")
 	e.File("/style", "ui/style.css")

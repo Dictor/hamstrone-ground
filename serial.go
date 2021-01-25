@@ -42,7 +42,7 @@ func listenPort(stream io.ReadWriteCloser, bufferSize int, result chan *hamsterT
 						}
 					}
 				} else {
-					if b == hamstertongue.MessageMarker {
+					if b == hamstertongue.MessageConstant["Structure"]["Marker"] {
 						markerFound = true
 					} else {
 						globalLogger.Debugf("unknown packet recieved : %d\n", b)
@@ -68,10 +68,10 @@ func decodeMessage(msgchan chan *hamsterTongueMessage, sendchan chan []byte) {
 				"payload": msg.Payload,
 			}).Debugf("serial message income")
 			switch msg.Verb {
-			case hamstertongue.MessageVerbHeartbeat:
-			case hamstertongue.MessageVerbValue:
+			case hamstertongue.MessageConstant["Verb"]["Heartbeat"]:
+			case hamstertongue.MessageConstant["Verb"]["Value"]:
 				Value[strconv.Itoa(int(msg.Noun))] = binary.LittleEndian.Uint32(addArrayPadding(msg.Payload, 4))
-			case hamstertongue.MessageVerbSignal:
+			case hamstertongue.MessageConstant["Verb"]["Signal"]:
 				data, err := json.Marshal(generalMessage{
 					Type: "signal",
 					Data: []interface{}{msg, string(msg.Payload)},

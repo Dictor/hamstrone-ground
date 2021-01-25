@@ -1,15 +1,18 @@
 package hamstertongue
 
-const (
-	/* MESSAGE STRUCTURE */
-	MessageMarker = 0xFF
-
-	/* MESSAGE VERB */
-	MessageVerbHeartbeat = 0x00
-	MessageVerbValue     = 0x01
-	MessageVerbSignal    = 0x02
-
-	/* MESSAGE NOUN */
-	MessageNounSignalInitOK   = 0x00
-	MessageNounSignalInitFail = 0x01
-)
+// MessageConstant is definition of protocol constant
+var MessageConstant map[string](map[string]uint8) = map[string](map[string]uint8){
+	"Structure": map[string]uint8{
+		"Marker": 0xFF,
+	},
+	"Verb": map[string]uint8{
+		"Heartbeat": 0x00,
+		"Value":     0x01,
+		"Signal":    0x02,
+	},
+	"Noun": map[string]uint8{
+		"InitOK":      0x00,
+		"InitFail":    0x01,
+		"I2CReadFail": 0x02,
+	},
+}

@@ -11,6 +11,7 @@ var HamstroneApp = {
                 ],
                 values: [],
                 valueKeys: {},
+                protocol: {},
                 signals: [],
                 currentPage: "value",
             },
@@ -19,8 +20,8 @@ var HamstroneApp = {
                     this.currentPage = m.page;
                 },
                 findSignalNounString: function(noun) {
-                    for (n in HamsterTongue.Noun.Signal) {
-                        if (HamsterTongue.Noun.Signal[n] === noun) return n;
+                    for (n in this.protocol.Noun.Signal) {
+                        if (this.protocol.Noun.Signal[n] === noun) return n;
                     }
                     return noun;
                 },
@@ -43,8 +44,8 @@ var HamstroneApp = {
                 }
             },
             mounted: async function() {
-                let resp = await axios.get("./definition/value");
-                HamstroneApp.app.valueKeys = resp.data;
+                HamstroneApp.app.valueKeys = (await axios.get("./definition/value")).data;
+                HamstroneApp.app.protocol = (await axios.get("./definition/protocol")).data;
             },
         });
         this.ws = new WebSocket((location.protocol == "https:" ? "wss:" : "ws:") + "//" + document.location.host + "/ws");
