@@ -37,11 +37,14 @@ func wsEvent(evt *ws.WebsocketEvent) {
 }
 
 func broadcastData(h *ws.WebsocketHub, sendQueue chan []byte, interval int) {
+	defer ValueMutex.Unlock()
 	for {
+		ValueMutex.Lock()
 		data, err := json.Marshal(generalMessage{
 			Type: "value",
 			Data: Value,
 		})
+		ValueMutex.Unlock()
 		if err != nil {
 			globalLogger.WithField("error", err).Errorln("error caused while value broadcast")
 		}

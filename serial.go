@@ -58,6 +58,7 @@ func listenPort(stream io.ReadWriteCloser, bufferSize int, result chan *hamsterT
 }
 
 func decodeMessage(msgchan chan *hamsterTongueMessage, sendchan chan []byte) {
+	defer ValueMutex.Unlock()
 	for {
 		select {
 		case msg := <-msgchan:
@@ -70,7 +71,9 @@ func decodeMessage(msgchan chan *hamsterTongueMessage, sendchan chan []byte) {
 			switch msg.Verb {
 			case hamstertongue.MessageConstant["Verb"]["Heartbeat"]:
 			case hamstertongue.MessageConstant["Verb"]["Value"]:
+				ValueMutex.Lock()
 				Value[strconv.Itoa(int(msg.Noun))] = binary.LittleEndian.Uint32(addArrayPadding(msg.Payload, 4))
+				ValueMutex.Unlock()
 			case hamstertongue.MessageConstant["Verb"]["Signal"]:
 				data, err := json.Marshal(generalMessage{
 					Type: "signal",
