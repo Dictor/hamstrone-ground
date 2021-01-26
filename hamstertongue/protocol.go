@@ -10,7 +10,7 @@ var MessageConstant map[string](map[string]uint8) = map[string](map[string]uint8
 		"Value":     0x01,
 		"Signal":    0x02,
 	},
-	"Noun": map[string]uint8{
+	"SignalNoun": map[string]uint8{
 		"InitOK":      0x00,
 		"InitFail":    0x01,
 		"I2CReadFail": 0x02,
