@@ -92,6 +92,5 @@ func main() {
 	e.File("/", "ui/index.html")
 	e.File("/style", "ui/style.css")
 	e.File("/script", "ui/script.js")
-	e.File("/protocol", "ui/protocol.js")
 	globalLogger.Panic(e.Start(webListenAddress))
 }
