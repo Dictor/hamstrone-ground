@@ -41,11 +41,17 @@ var HamstroneApp = {
                                 return "";
                         }
                     }
+                },
+                handleValue: function(value) {
+                    let handler = this.valueKeys[value.name] ? this.valueKeys[value.name].handler : 'bypass';
+                    return HamstroneApp.handler[handler](value.value);
                 }
             },
             mounted: async function() {
-                HamstroneApp.app.valueKeys = (await axios.get("./definition/value")).data;
-                HamstroneApp.app.protocol = (await axios.get("./definition/protocol")).data;
+                let val = await axios.get("./definition/value");
+                HamstroneApp.app.valueKeys = val.data;
+                let protoc = await axios.get("./definition/protocol");
+                HamstroneApp.app.protocol = (protoc).data;
             },
         });
         this.ws = new WebSocket((location.protocol == "https:" ? "wss:" : "ws:") + "//" + document.location.host + "/ws");
@@ -71,6 +77,20 @@ var HamstroneApp = {
             case "signal":
                 HamstroneApp.app.signals.push({ time: new Date().toLocaleString(), noun: msg.data[0].noun, payload: msg.data[0].payload, strpayload: msg.data[1]});
                 break;
+        }
+    },
+    handler: {
+        bypass: (input) => {
+            return input;
+        },
+        itg3205_temp: (input) => {
+            //return input;
+            let exp = ((input & 0x7C00) >>> 10) - 15;
+            let pre = (input & 0x03FF);
+            let sign = (input & 0x8000) >>> 15;
+            console.log(exp, pre, sign)
+            return (Math.pow(2, exp) + (1 + pre / 1024)) * (sign === 0 ? 1 : -1);
+            //return (input / 1708.475).toFixed(2);
         }
     }
 }
