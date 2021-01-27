@@ -20,8 +20,8 @@ var HamstroneApp = {
                     this.currentPage = m.page;
                 },
                 findSignalNounString: function(noun) {
-                    for (n in this.protocol.Noun.Signal) {
-                        if (this.protocol.Noun.Signal[n] === noun) return n;
+                    for (n in this.protocol.SignalNoun) {
+                        if (this.protocol.SignalNoun[n] === noun) return n;
                     }
                     return noun;
                 },
@@ -44,7 +44,8 @@ var HamstroneApp = {
                 },
                 handleValue: function(value) {
                     let handler = this.valueKeys[value.name] ? this.valueKeys[value.name].handler : 'bypass';
-                    return HamstroneApp.handler[handler](value.value);
+                    let handlerfunc = HamstroneApp.handler[handler] ?? HamstroneApp.handler['bypass'];
+                    return handlerfunc(value.value);
                 }
             },
             mounted: async function() {
@@ -83,14 +84,8 @@ var HamstroneApp = {
         bypass: (input) => {
             return input;
         },
-        itg3205_temp: (input) => {
-            //return input;
-            let exp = ((input & 0x7C00) >>> 10) - 15;
-            let pre = (input & 0x03FF);
-            let sign = (input & 0x8000) >>> 15;
-            console.log(exp, pre, sign)
-            return (Math.pow(2, exp) + (1 + pre / 1024)) * (sign === 0 ? 1 : -1);
-            //return (input / 1708.475).toFixed(2);
+        mpu6050_temp: (input) => {
+            return (input / 340 + 36.53);
         }
     }
 }
