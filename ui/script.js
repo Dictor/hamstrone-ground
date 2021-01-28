@@ -85,7 +85,10 @@ var HamstroneApp = {
             return input;
         },
         mpu6050_temp: (input) => {
-            return (input / 340 + 36.53);
+            let buf = new ArrayBuffer(4);
+            let dv = new DataView(buf);
+            dv.setUint16(0, input);
+            return (dv.getInt16(0) / 340 + 36.53).toFixed(2);
         }
     }
 }
