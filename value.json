@@ -1,6 +1,6 @@
 {
     "0": { "name": "runtime", "unit": "sec", "handler": "bypass"},
-    "1": { "name": "mpu6050 whoami", "unit": "", "handler": "hex" },
+    "1": { "name": "update speed", "unit": "hz", "handler": "ms_to_hz" },
     "2": { "name": "mpu6050 accel x", "unit": "'/s", "handler": "mpu6050_accel" },
     "3": { "name": "mpu6050 accel y", "unit": "'/s", "handler": "mpu6050_accel" },
     "4": { "name": "mpu6050 accel z", "unit": "'/s", "handler": "mpu6050_accel" },

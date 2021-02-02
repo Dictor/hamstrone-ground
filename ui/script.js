@@ -89,6 +89,9 @@ var HamstroneApp = {
             let dv = new DataView(buf);
             dv.setUint16(0, input);
             return (dv.getInt16(0) / 340 + 36.53).toFixed(2);
-        }
+        },
+        ms_to_hz: (input) => {
+            return (1 / input * 1000).toFixed(2);
+        },
     }
 }
