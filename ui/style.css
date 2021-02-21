@@ -1,13 +1,21 @@
+html, body {
+    margin: 0;
+}
+
 body {
     font-family: Consolas;
     background-color: black;
     color: white;
 }
 
+.menu {
+    max-height: 100px;
+}
+
 .menu-title {
     font-size: 2rem;
     color: cornflowerblue;
-    margin: 1rem 0;
+    margin: 0.3rem 0;
 }
 
 .menu-wrapper {
@@ -27,9 +35,12 @@ body {
 }
 
 .content {
-    padding: 20px 0px;
+    padding: 20px 0px 0px 0px;
     display: flex;
     flex-direction: column;
+    position: absolute;
+    width: 100%;
+    max-height: calc(100% - 130px);
 }
 
 .value-row {
@@ -42,6 +53,23 @@ body {
 
 .value-row>.value-key {
     float: left;
+}
+
+#page-signal {
+    overflow-y: auto;
+}
+
+.signal-row {
+    animation: row-appear 0.5s ease;
+}
+
+@keyframes row-appear {
+    0% {
+        background-color: rgba(250, 128, 114, 1);
+    }
+    100% {
+        background-color: rgba(250, 128, 114, 0);
+    }
 }
 
 .signal-row>span {
