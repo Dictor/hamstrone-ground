@@ -4,5 +4,8 @@
     "2": { "name": "mpu6050 accel x", "unit": "'/s", "handler": "mpu6050_accel" },
     "3": { "name": "mpu6050 accel y", "unit": "'/s", "handler": "mpu6050_accel" },
     "4": { "name": "mpu6050 accel z", "unit": "'/s", "handler": "mpu6050_accel" },
-    "5": { "name": "mpu6050 temp", "unit": "'c", "handler": "mpu6050_temp" }
+    "5": { "name": "mpu6050 gyro x", "unit": "'/s", "handler": "mpu6050_gyro" },
+    "6": { "name": "mpu6050 gyro y", "unit": "'/s", "handler": "mpu6050_gyro" },
+    "7": { "name": "mpu6050 gyro z", "unit": "'/s", "handler": "mpu6050_gyro" },
+    "8": { "name": "mpu6050 temp", "unit": "'c", "handler": "mpu6050_temp" }
 }
