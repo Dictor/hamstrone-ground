@@ -101,6 +101,18 @@ var HamstroneApp = {
     bypass: (input) => {
       return input;
     },
+    mpu6050_accel: (input) => {
+      let buf = new ArrayBuffer(4);
+      let dv = new DataView(buf);
+      dv.setUint16(0, input);
+      return (dv.getInt16(0) / 8191.5).toFixed(2);
+    },
+    mpu6050_gyro: (input) => {
+      let buf = new ArrayBuffer(4);
+      let dv = new DataView(buf);
+      dv.setUint16(0, input);
+      return (dv.getInt16(0) / 131.068).toFixed(2);
+    },
     mpu6050_temp: (input) => {
       let buf = new ArrayBuffer(4);
       let dv = new DataView(buf);
