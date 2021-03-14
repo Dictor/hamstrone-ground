@@ -9,6 +9,8 @@
     <script src="https://use.fontawesome.com/releases/v5.2.0/js/all.js"></script>
     <link rel="stylesheet" href="./style">
     <script src="./script"></script>
+    <link rel="stylesheet" href="./lib/uPlot.min.css">
+    <script src="./lib/uPlot.iife.js"></script>
     <title>hamstrone-ground</title>
 </head>
 
@@ -38,6 +40,10 @@
                 <div class="signal-row" v-for="(v, i) in signals">
                     {{v.time}}: <span>{{findSignalNounString(v.noun)}}</span> ({{v.strpayload}})
                 </div>
+            </div>
+            <div id="page-chart" v-show="currentPage == 'chart'">
+                <p v-if="values.length > 0">X={{handleValue(values[2])}} Y={{handleValue(values[3])}} Z={{handleValue(values[4])}}</p>
+                <div id="chart" style="min-height: 500px;"></div>
             </div>
         </div>
 </body>

@@ -1,6 +1,8 @@
 var HamstroneApp = {
   app: {},
   ws: {},
+  chart: {},
+  angleData: [[], [], [], []], // [0]=timestamp, [1]=x, [2]=y, [3]=z
   init: function () {
     this.app = new Vue({
       el: "#app",
@@ -8,6 +10,7 @@ var HamstroneApp = {
         menus: [
           { text: "Value", page: "value" },
           { text: "Signal", page: "signal" },
+          { text: "Chart", page: "chart" },
         ],
         values: [],
         valueKeys: {},
@@ -59,10 +62,10 @@ var HamstroneApp = {
         HamstroneApp.app.protocol = protoc.data;
       },
       computed: {
-        isConnectedColor: function() {
-          return this.isConnected ? 'green' : 'red';
-        }
-      }
+        isConnectedColor: function () {
+          return this.isConnected ? "green" : "red";
+        },
+      },
     });
     this.ws = new WebSocket(
       (location.protocol == "https:" ? "wss:" : "ws:") +
@@ -80,16 +83,21 @@ var HamstroneApp = {
         HamstroneApp.parseMessage(JSON.parse(msgs[0]));
       }
     };
-    this.ws.onopen = function() {
+    this.ws.onopen = function () {
       HamstroneApp.app.isConnected = true;
     };
-    this.ws.onclose = function() {
+    this.ws.onclose = function () {
       HamstroneApp.app.isConnected = false;
     };
-    this.ws.onerror = function(event) {
+    this.ws.onerror = function (event) {
       console.error("websocker error:", event);
       HamstroneApp.app.isConnected = false;
     };
+    this.chart = new uPlot(
+      this.chartOption,
+      this.angleData,
+      document.getElementById("chart")
+    );
   },
   parseMessage: function (msg) {
     switch (msg.type) {
@@ -97,6 +105,13 @@ var HamstroneApp = {
         HamstroneApp.app.values.splice(0);
         for (d in msg.data) {
           HamstroneApp.app.values.push({ name: d, value: msg.data[d] });
+        }
+        HamstroneApp.angleData[0].push(Date.now());
+        if (msg.data[2] <= 36000 && msg.data[3] <= 36000 && msg.data[4] <= 36000) {
+          HamstroneApp.angleData[1].push(msg.data[2]);
+          HamstroneApp.angleData[2].push(msg.data[3]);
+          HamstroneApp.angleData[3].push(msg.data[4]);
+          HamstroneApp.chart.setData(HamstroneApp.angleData);
         }
         break;
       case "signal":
@@ -136,10 +151,38 @@ var HamstroneApp = {
       return (dv.getInt16(0) / 340 + 36.53).toFixed(2);
     },
     angle: (input) => {
-      return ((input / 100) - 180).toFixed(2);
+      return (input / 100 - 180).toFixed(2);
     },
     ms_to_hz: (input) => {
       return ((1 / input) * 1000).toFixed(2);
     },
+  },
+  chartOption: {
+    title: "Posture",
+    id: "angle-chart",
+    class: "posture-chart",
+    width: 800,
+    height: 600,
+    series: [
+      {},
+      {
+        label: "X",
+        value: (self, rawValue) => HamstroneApp.handler.angle(rawValue),
+        stroke: "red",
+        width: 1,
+      },
+      {
+        label: "Y",
+        value: (self, rawValue) => HamstroneApp.handler.angle(rawValue),
+        stroke: "green",
+        width: 1,
+      },
+      {
+        label: "Z",
+        value: (self, rawValue) => HamstroneApp.handler.angle(rawValue),
+        stroke: "blue",
+        width: 1,
+      },
+    ],
   },
 };
