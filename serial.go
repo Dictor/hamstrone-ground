@@ -72,7 +72,9 @@ func decodeMessage(msgchan chan *hamsterTongueMessage, sendchan chan []byte) {
 			case hamstertongue.MessageConstant["Verb"]["Heartbeat"]:
 			case hamstertongue.MessageConstant["Verb"]["Value"]:
 				ValueMutex.Lock()
-				Value[strconv.Itoa(int(msg.Noun))] = binary.LittleEndian.Uint32(addArrayPadding(msg.Payload, 4))
+				for i := 0; i < 16; i++ {
+					Value[strconv.Itoa(i)] = binary.LittleEndian.Uint32(addArrayPadding(msg.Payload[i*4:i*4+3], 4))
+				}
 				ValueMutex.Unlock()
 			case hamstertongue.MessageConstant["Verb"]["Signal"]:
 				data, err := json.Marshal(generalMessage{
