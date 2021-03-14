@@ -14,6 +14,7 @@ var HamstroneApp = {
         protocol: {},
         signals: [],
         currentPage: "value",
+        isConnected: false,
       },
       methods: {
         onMenuClick: function (m) {
@@ -57,6 +58,11 @@ var HamstroneApp = {
         let protoc = await axios.get("./definition/protocol");
         HamstroneApp.app.protocol = protoc.data;
       },
+      computed: {
+        isConnectedColor: function() {
+          return this.isConnected ? 'green' : 'red';
+        }
+      }
     });
     this.ws = new WebSocket(
       (location.protocol == "https:" ? "wss:" : "ws:") +
@@ -73,6 +79,16 @@ var HamstroneApp = {
       } else {
         HamstroneApp.parseMessage(JSON.parse(msgs[0]));
       }
+    };
+    this.ws.onopen = function() {
+      HamstroneApp.app.isConnected = true;
+    };
+    this.ws.onclose = function() {
+      HamstroneApp.app.isConnected = false;
+    };
+    this.ws.onerror = function(event) {
+      console.error("websocker error:", event);
+      HamstroneApp.app.isConnected = false;
     };
   },
   parseMessage: function (msg) {
@@ -118,6 +134,9 @@ var HamstroneApp = {
       let dv = new DataView(buf);
       dv.setUint16(0, input);
       return (dv.getInt16(0) / 340 + 36.53).toFixed(2);
+    },
+    angle: (input) => {
+      return ((input / 100) - 180).toFixed(2);
     },
     ms_to_hz: (input) => {
       return ((1 / input) * 1000).toFixed(2);

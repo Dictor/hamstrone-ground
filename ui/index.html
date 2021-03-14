@@ -15,7 +15,10 @@
 <body onload="HamstroneApp.init()">
     <div id="app">
         <div class="menu">
-            <p class="menu-title">Hamstrone Ground</p>
+            <div>
+                <span class="menu-title">Hamstrone Ground</span>
+                <span v-bind:style="{ 'background-color': isConnectedColor}">{{isConnected ? "Connected" : "Disconnected"}}</span>
+            </div>
             <div class="menu-wrapper">
                 <div class="menu-element" v-for="(v, i) in menus" :id="i" @click="onMenuClick(v)">
                     {{v.text}}
